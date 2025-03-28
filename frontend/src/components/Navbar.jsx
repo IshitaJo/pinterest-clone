@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
   return (
     <div>
       <div className="bg-white shadow-sm">
@@ -26,7 +26,7 @@ const Navbar = () => {
               to="/account"
               className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xl text-gray-700"
             >
-              I{/* {user.name.slice(0, 1)} */}
+              {user.name.slice(0, 1)}
             </Link>
           </div>
         </div>
