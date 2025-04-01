@@ -20,16 +20,6 @@ export const PinProvider = ({ children }) => {
         }
     }
 
-    async function updatePin(id, title, pin, setEdit) {
-        try {
-            const { data } = await axios.put("/api/pins/" + id, { title, pin });
-            toast.success(data.message);
-            fetchPin(id);
-            setEdit(false);
-        } catch (error) {
-            toast.error(error.response.data.message);
-        }
-    }
     const [pin, setPin] = useState([]);
     async function fetchPin(id){
         setLoading(true);
@@ -42,13 +32,44 @@ export const PinProvider = ({ children }) => {
             setLoading(false); 
         }
     }
+    async function updatePin(id, title, pin, setEdit) {
+        try {
+            const { data } = await axios.put("/api/pins/" + id, { title, pin });
+            toast.success(data.message);
+            fetchPin(id);
+            setEdit(false);
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
+
+    async function addComment(id, comment, setComment){
+        try {
+            const { data } = await axios.post("/api/pins/comment/" + id, { comment });
+            toast.success(data.message);
+            fetchPin(id);
+            setComment("");
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
+
+    async function deleteComment(id, commentId) {
+        try {
+            const { data } = await axios.delete(`/api/pins/comment/${id}?commentId=${commentId}`);
+            toast.success(data.message);
+            fetchPin(id);
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
 
     useEffect(() => {
         fetchPins();
     }, []);
 
     return(
-        <PinContext.Provider value = {{pins, loading, fetchPin, pin, updatePin}}>
+        <PinContext.Provider value = {{pins, loading, fetchPin, pin, updatePin, addComment, deleteComment}}>
             {children}
         </PinContext.Provider>
     )
