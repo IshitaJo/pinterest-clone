@@ -141,5 +141,5 @@ export const updatePin = TryCatch(async (req, res) => {
 
   res.json({
     message: "Pin updated",
-  });
+  }); 
 });
