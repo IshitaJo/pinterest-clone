@@ -1,5 +1,5 @@
 import React, { useEffect , useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { PinData } from '../context/PinContext';
 import { Loading } from '../components/Loading';
 import { MdDelete } from "react-icons/md";
@@ -7,7 +7,7 @@ import { FaEdit } from "react-icons/fa";
 
 const PinPage = ({user}) => {
     const params = useParams();
-    const {loading, fetchPin, pin, updatePin, addComment, deleteComment} = PinData();
+    const {loading, fetchPin, pin, updatePin, addComment, deleteComment, deletePin } = PinData();
     
     const [edit, setEdit] = useState(false)
     const [title, setTitle] = useState("")
@@ -32,7 +32,18 @@ const PinPage = ({user}) => {
     };
 
     const deleteCommentHander = (id) => {
+      if(confirm("Are you sure you want to delete this comment?")){
+        // Call the deleteComment function from PinContext  
       deleteComment(pin._id, id);
+      }
+    };
+
+    const navigate = useNavigate();
+
+    const deletePinHandler = () => {
+        if (confirm("Are you sure you want to delete this pin?")) {
+            deletePin(pin._id, navigate);
+        }
     };
 
     useEffect(() => {
@@ -80,7 +91,7 @@ const PinPage = ({user}) => {
                   )}
 
                   {pin.owner && pin.owner._id === user._id && (
-                    <button className="bg-red-500 text-white py-1 px-3 rounded">
+                    <button onClick={deletePinHandler} className="bg-red-500 text-white py-1 px-3 rounded">
                       <MdDelete />
                     </button>
                   )}

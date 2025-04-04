@@ -64,12 +64,53 @@ export const PinProvider = ({ children }) => {
         }
     }
 
+    async function deletePin(id, navigate) {
+        setLoading(true);
+        try {
+          const { data } = await axios.delete(`/api/pins/${id}`);
+          toast.success(data.message);
+          navigate("/");
+          setLoading(false);
+          fetchPins();
+        } catch (error) {
+          toast.error(error.response.data.message);
+          setLoading(false);
+        }
+      }
+    
+    async function addPin(formData, setFilePrev, setFile, setTitle, setPin, navigate) {
+        try {
+            const { data } = await axios.post("/api/pins/new", formData)
+            toast.success(data.message);
+            setFilePrev("");
+            setFile([]);
+            setTitle("");
+            setPin("");
+            fetchPins();
+            navigate("/");
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
+
     useEffect(() => {
         fetchPins();
     }, []);
 
     return(
-        <PinContext.Provider value = {{pins, loading, fetchPin, pin, updatePin, addComment, deleteComment}}>
+        <PinContext.Provider 
+            value = {{
+                pins, 
+                loading, 
+                fetchPin,
+                fetchPins, 
+                pin, 
+                updatePin, 
+                addComment, 
+                deleteComment, 
+                deletePin, 
+                addPin
+            }}>
             {children}
         </PinContext.Provider>
     )

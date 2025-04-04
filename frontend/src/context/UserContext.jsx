@@ -1,6 +1,7 @@
 import { createContext, use, useContext, useEffect, useState} from "react";
 import toast, {Toaster} from "react-hot-toast";
 import axios from "axios";  
+import { PinData } from "./PinContext";
 
 const UserContext = createContext();
 
@@ -9,8 +10,7 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false);
 
-
-    async function registerUser(name, email, password, navigate) {
+    async function registerUser(name, email, password, navigate, fetchPins) {
         setBtnLoading(true);
         try {
             const {data} = await axios.post("/api/user/register",{name, email, password});
@@ -20,12 +20,13 @@ export const UserProvider = ({ children }) => {
             setIsAuth(true);
             setBtnLoading(false);
             navigate("/");
+            fetchPins();
         }catch (error) {
             toast.error(error.response.data.message);
             setBtnLoading(false);
         }
     }
-    async function loginUser(email, password, navigate) {
+    async function loginUser(email, password, navigate, fetchPins) {
         setBtnLoading(true);
         try {
             const {data} = await axios.post("/api/user/login",{email, password});
@@ -35,6 +36,7 @@ export const UserProvider = ({ children }) => {
             setIsAuth(true);
             setBtnLoading(false);
             navigate("/");
+            fetchPins();
         }catch (error) {
             toast.error(error.response.data.message);
             setBtnLoading(false);
@@ -64,7 +66,17 @@ export const UserProvider = ({ children }) => {
       }, []);
 
     return (
-        <UserContext.Provider value={{loginUser, btnLoading, isAuth, user, loading, registerUser}}>
+        <UserContext.Provider 
+          value={{
+            loginUser, 
+            btnLoading, 
+            isAuth, 
+            setIsAuth,
+            user, 
+            setUser,
+            loading, 
+            registerUser
+          }}>
             {children}
         </UserContext.Provider>
     );
