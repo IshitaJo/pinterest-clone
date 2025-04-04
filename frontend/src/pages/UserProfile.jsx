@@ -64,12 +64,12 @@ const UserProfile = ({ user: loggedInUser }) => {
               {user.following && <p>{user.following.length} following</p>}
             </div>
             <div className="flex justify-center mt-4 space-x-2">
-              <button 
+              {loggedInUser._id === user._id  ? "":(<button 
                 onClick={followHandler}
                 className='bg-gray-200 px-4 py-2 rounded hover:cursor-pointer'
               >
               {isFollow ? "Unfollow" : "Follow"}
-              </button>
+              </button>)}
             </div>
             <div className="mt-4 flex flex-wrap justify-center gap-4">
               {userPins && userPins.length > 0 ? (

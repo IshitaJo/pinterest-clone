@@ -34,7 +34,7 @@ app.use("/api/pins", pinRoutes); // Ensure this matches frontend API calls
 const __dirname = path.resolve();
 
 // Serve static files (Frontend)
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));

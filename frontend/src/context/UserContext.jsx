@@ -14,13 +14,13 @@ export const UserProvider = ({ children }) => {
         setBtnLoading(true);
         try {
             const {data} = await axios.post("/api/user/register",{name, email, password});
-
+            fetchPins();
             toast.success(data.message);
             setUser(data.user);
             setIsAuth(true);
             setBtnLoading(false);
             navigate("/");
-            fetchPins();
+            
         }catch (error) {
             toast.error(error.response.data.message);
             setBtnLoading(false);
@@ -30,13 +30,13 @@ export const UserProvider = ({ children }) => {
         setBtnLoading(true);
         try {
             const {data} = await axios.post("/api/user/login",{email, password});
-
+            fetchPins();
             toast.success(data.message);
             setUser(data.user);
             setIsAuth(true);
             setBtnLoading(false);
             navigate("/");
-            fetchPins();
+            
         }catch (error) {
             toast.error(error.response.data.message);
             setBtnLoading(false);
