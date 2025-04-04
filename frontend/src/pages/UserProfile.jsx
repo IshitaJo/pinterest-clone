@@ -4,6 +4,7 @@ import axios from 'axios';
 import { set } from 'mongoose';
 import { PinData } from '../context/PinContext';
 import PinCard from '../components/PinCard';
+import { UserData } from '../context/UserContext';
 
 const UserProfile = ({ user: loggedInUser }) => {
   const params = useParams();
@@ -20,10 +21,19 @@ const UserProfile = ({ user: loggedInUser }) => {
   }
 
   const [isFollow, setIsFollow] = useState(false);
+  const {followUser} = UserData();
 
   const followHandler = () =>{
     setIsFollow(!isFollow);
+    followUser(user._id, fetchUser);
   }
+
+  const followers = user.followers ;
+  useEffect(()=>{
+    if(followers && followers.includes(loggedInUser._id)){
+      setIsFollow(true);
+    }
+  },[user]);
 
   const {pins} = PinData();
   let userPins;
